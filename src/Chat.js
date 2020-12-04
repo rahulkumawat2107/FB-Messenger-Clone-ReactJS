@@ -1,4 +1,6 @@
 import React, {useState, useEffect} from 'react'
+import { Button, FormControl, InputLabel, Input, FormHelperText} from '@material-ui/core';
+
 
 function Chat() {
 
@@ -17,9 +19,13 @@ function Chat() {
     
     return(
         <div>
+
             <form>
-                <input value={input} onChange = {(e) => setInput(e.target.value)}></input>
-                <button type = 'submit' onClick={sendMessage}>Send Message</button>
+                <FormControl>
+                    <InputLabel>Enter a message</InputLabel>
+                    <Input value={input} onChange = {(e) => setInput(e.target.value)} />
+                    <Button disabled={!input} variant = "contained" color = "primary" type = 'submit' onClick={sendMessage}>Send Message</Button>
+                </FormControl>
             </form>
 
             {
