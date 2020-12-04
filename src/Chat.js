@@ -12,9 +12,11 @@ function Chat() {
 
     const [username, setUsername] = useState('');
 
+    //fetching data from database
     useEffect(() => {
-        db.collection('messages').onSnapshot(snapshot => {
-            console.log("snapshot",snapshot.docs.data)
+        db.collection('messages')
+        .orderBy('timestamp', 'desc') //ordering the messages in descending order of timestamp
+        .onSnapshot(snapshot => {
             setMessages(snapshot.docs.map(doc => doc.data()));
         })
     }, [])
@@ -34,7 +36,6 @@ function Chat() {
             username: username,
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
         })
-
 
         // setMessages([...messages, {username: username, message: input}]);
         setInput('');
