@@ -1,17 +1,28 @@
 import React, {useState, useEffect} from 'react'
 import { Button, FormControl, InputLabel, Input, FormHelperText} from '@material-ui/core';
+import Message from './Message';
 
 
 function Chat() {
 
     const [input, setInput] = useState('');
-    const [messages, setMessages] = useState([]);
+    const [messages, setMessages] = useState(
+        [
+            {u_name:'rahul', text:'yo beti'},
+            {u_name:'beti', text:'yo'}
+        ]);
+
+    const [username, setUsername] = useState('');
+
+    useEffect(() => {
+        setUsername(prompt('Enter your name:'));
+    }, [])
 
     //console.log(input);
     
     const sendMessage = (e) => {
         e.preventDefault();
-        setMessages([...messages, input]);
+        setMessages([...messages, {u_name: username, text: input}]);
         setInput('');
     }
 
@@ -19,7 +30,7 @@ function Chat() {
     
     return(
         <div>
-
+            <h2>Hello {username}</h2>
             <form>
                 <FormControl>
                     <InputLabel>Enter a message</InputLabel>
@@ -30,7 +41,7 @@ function Chat() {
 
             {
                 messages.map(message => (
-                    <p>{message}</p>
+                    <Message username={username} message={message} />
                 ))
             }
         </div>
