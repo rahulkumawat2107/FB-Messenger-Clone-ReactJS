@@ -3,6 +3,9 @@ import { Button, FormControl, InputLabel, Input, FormHelperText} from '@material
 import Message from './Message';
 import db from './firebase';
 import firebase from 'firebase';
+import Flipmove from 'react-flip-move';
+import SendIcon from '@material-ui/icons/Send';
+import {IconButton} from '@material-ui/core';
 
 
 function Chat() {
@@ -17,7 +20,7 @@ function Chat() {
         db.collection('messages')
         .orderBy('timestamp', 'desc') //ordering the messages in descending order of timestamp
         .onSnapshot(snapshot => {
-            setMessages(snapshot.docs.map(doc => doc.data()));
+            setMessages(snapshot.docs.map(doc => ({id: doc.id, message: doc.data()})));
         })
     }, [])
 
@@ -46,19 +49,23 @@ function Chat() {
     return(
         <div>
             <h2>Hello {username}</h2>
-            <form>
+            <form className="app__form">
                 <FormControl>
                     <InputLabel>Enter a message</InputLabel>
                     <Input value={input} onChange = {(e) => setInput(e.target.value)} />
-                    <Button disabled={!input} variant = "contained" color = "primary" type = 'submit' onClick={sendMessage}>Send Message</Button>
+                    <IconButton disabled={!input} variant = "contained" color = "primary" type = 'submit' onClick={sendMessage}>
+                        <SendIcon />
+                    </IconButton>
                 </FormControl>
             </form>
 
-            {
-                messages.map(message => (
-                    <Message username={username} message={message} />
-                ))
-            }
+            <Flipmove>
+                {
+                    messages.map(({id, message}) => (
+                        <Message key={id} username={username} message={message} />
+                    ))
+                }
+            </Flipmove>
         </div>
     )
 }
