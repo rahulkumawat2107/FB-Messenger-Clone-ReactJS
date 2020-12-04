@@ -1,18 +1,23 @@
 import React, {useState, useEffect} from 'react'
 import { Button, FormControl, InputLabel, Input, FormHelperText} from '@material-ui/core';
 import Message from './Message';
+import db from './firebase';
+import firebase from 'firebase';
 
 
 function Chat() {
 
     const [input, setInput] = useState('');
-    const [messages, setMessages] = useState(
-        [
-            {u_name:'rahul', text:'yo beti'},
-            {u_name:'beti', text:'yo'}
-        ]);
+    const [messages, setMessages] = useState([]);
 
     const [username, setUsername] = useState('');
+
+    useEffect(() => {
+        db.collection('messages').onSnapshot(snapshot => {
+            console.log("snapshot",snapshot.docs.data)
+            setMessages(snapshot.docs.map(doc => doc.data()));
+        })
+    }, [])
 
     useEffect(() => {
         setUsername(prompt('Enter your name:'));
@@ -22,11 +27,20 @@ function Chat() {
     
     const sendMessage = (e) => {
         e.preventDefault();
-        setMessages([...messages, {u_name: username, text: input}]);
+
+        //adding messages to firebase
+        db.collection('messages').add({
+            message: input,
+            username: username,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        })
+
+
+        // setMessages([...messages, {username: username, message: input}]);
         setInput('');
     }
 
-    console.log(messages)
+    console.log("label" ,messages.message)
     
     return(
         <div>
