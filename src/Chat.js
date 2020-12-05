@@ -50,10 +50,9 @@ function Chat() {
         <div>
             <h2>Hello {username}</h2>
             <form className="app__form">
-                <FormControl>
-                    <InputLabel>Enter a message</InputLabel>
-                    <Input value={input} onChange = {(e) => setInput(e.target.value)} />
-                    <IconButton disabled={!input} variant = "contained" color = "primary" type = 'submit' onClick={sendMessage}>
+                <FormControl className="app__formControl">
+                    <Input className="app__input" placeholder='Enter a message here' value={input} onChange = {(e) => setInput(e.target.value)} />
+                    <IconButton className="app__iconButton" disabled={!input} variant = "contained" color = "primary" type = 'submit' onClick={sendMessage}>
                         <SendIcon />
                     </IconButton>
                 </FormControl>
